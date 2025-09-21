@@ -15,6 +15,7 @@ echo "Select language / Selecciona idioma:"
 echo "1) English"
 echo "2) Español"
 read -p "> " lang
+clear
 
 if [[ "$lang" == "1" ]]; then
     txt_warn="WARNING: It is recommended to perform a factory reset before flashing a custom ROM."
@@ -70,6 +71,7 @@ printf "%*s\n" $(((${#banner} + ${#txt_warn2}) / 2)) "$txt_warn2"
 printf "%*s\n\n" $(((${#banner} + ${#txt_warn3}) / 2)) "$txt_warn3"
 
 read -p "$txt_continue" confirm
+clear
 
 if { [[ "$lang" == "1" ]] && [[ "$confirm" != "YES" ]]; } || { [[ "$lang" == "2" ]] && [[ "$confirm" != "SI" ]]; }; then
     echo "$txt_cancel"
@@ -77,6 +79,8 @@ if { [[ "$lang" == "1" ]] && [[ "$confirm" != "YES" ]]; } || { [[ "$lang" == "2"
 fi
 
 read -p "$txt_dep" instalar
+clear
+
 if { [[ "$lang" == "1" ]] && [[ "$instalar" == "y" ]]; } || { [[ "$lang" == "2" ]] && [[ "$instalar" == "s" ]]; }; then
     if [ -f /etc/debian_version ]; then
         sudo apt update
@@ -87,9 +91,11 @@ if { [[ "$lang" == "1" ]] && [[ "$instalar" == "y" ]]; } || { [[ "$lang" == "2" 
         echo "$txt_not_supported"
         exit 1
     fi
+    clear
 fi
 
 read -p "$txt_rom_path" ROM_ZIP
+clear
 if [[ ! -f "$ROM_ZIP" ]]; then
     echo "$txt_rom_error"
     exit 1
@@ -99,6 +105,7 @@ echo "$txt_connect"
 adb devices
 
 read -p "$txt_recovery" cont
+clear
 if { [[ "$lang" == "1" ]] && [[ "$cont" != "y" ]]; } || { [[ "$lang" == "2" ]] && [[ "$cont" != "s" ]]; }; then
     echo "$txt_pls_reboot"
     exit 1
@@ -107,14 +114,17 @@ fi
 echo "$txt_sideload_start"
 echo "$txt_sideload_instr"
 read -p "$txt_press"
+clear
 
 adb sideload "$ROM_ZIP"
 
 echo ""
 read -p "$txt_gapps" gapps
+clear
 
 if { [[ "$lang" == "1" ]] && [[ "$gapps" == "y" ]]; } || { [[ "$lang" == "2" ]] && [[ "$gapps" == "s" ]]; }; then
     read -p "$txt_gapps_path" GAPPS_ZIP
+    clear
     if [[ ! -z "$GAPPS_ZIP" ]]; then
         if [[ ! -f "$GAPPS_ZIP" ]]; then
             echo "$txt_gapps_error"
@@ -123,6 +133,7 @@ if { [[ "$lang" == "1" ]] && [[ "$gapps" == "y" ]]; } || { [[ "$lang" == "2" ]] 
         echo "$txt_gapps_repeat"
         echo "$txt_sideload_instr"
         read -p "$txt_press"
+        clear
         adb sideload "$GAPPS_ZIP"
         echo "$txt_gapps_fl"
     fi
